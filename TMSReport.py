@@ -46,7 +46,6 @@ class TMSReportForm(QDialog):
         self.dateEditTo.setCalendarPopup(True)
         self.labelStatus = QLabel('')
         self.labelSaveAs = QLabel('Save As')
-        self.txtSaveAs = Q
 
         self.processButton = QPushButton('Process')
         self.cancelButton = QPushButton('Cancel')
