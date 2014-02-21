@@ -416,18 +416,28 @@ class TMSReportForm(QDialog):
 
         for emp_no in sorted(employees):
             emp = employees[emp_no]
-            cur.execute("INSERT into user_tms_report ( EMPLOYEE_NO, SURNAME, FIRSTNAME, SHIFT_SCHEDULE, RESTDAY_SCHEDULE, DATE_FROM, DATE_TO, "\
-                "DAYS_WORKED, VL, SL, LWOP, BL, OIL, ML, MARRIAGE_DAYS, CL, SPL, PL, ABSENT, SUSPENSION, LATE_UNDERTIME, "\
-                "ND1, OT1, ND2, OT2, ND3, OT3, ND4, OT4, ND5, OT5, OT6, ND6, OT7, ND7, OT8, ND8, OT9, ND9, OT10, ND10, OT11, ND11, OT12, ND12, "\
-                "CREATED_BY, CREATED_DATE) "\
-                " VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', "\
-                "'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
-                (emp_no, emp['lastname'], emp['firstname'], emp['shift_schedule'], emp['restday_schedule'], dateFrom.toPython(), dateTo.toPython(), emp['days_worked'],
-                emp['vl'], emp['sl'],  emp['lwop'], emp['bl'], emp['oil'], emp['ml'], emp['marriage_days'], emp['cl'], emp['spl'], emp['pl'],
-                emp['absent'], emp['suspension'], emp['late_undertime'],
-                emp['nd1'], emp['ot1'], emp['nd2'], emp['ot2'],  emp['nd3'], emp['ot3'],  emp['nd4'], emp['ot4'],  emp['nd5'], emp['ot5'],
-                emp['nd6'], emp['ot6'],  emp['nd7'], emp['ot7'],  emp['nd8'], emp['ot8'],  emp['nd9'], emp['ot9'],  emp['nd10'], emp['ot10'],
-                emp['nd11'], emp['ot11'],  emp['nd12'], emp['ot12'], "TMSReport", now.strftime('%Y-%m-%d %H:%M:%S')))
+            # do not save employees who have no data
+            if emp['days_worked'] <> 0 or emp['vl'] <> 0 or emp['sl'] <> 0 or emp['lwop'] <> 0 or\
+               emp['bl'] <> 0 or emp['oil'] <> 0 or emp['ml'] <> 0 or emp['marriage_days'] <> 0 or emp['cl'] <> 0 or\
+               emp['spl'] <> 0 or emp['pl'] <> 0  or emp['absent'] <> 0 or emp['suspension'] <> 0 or \
+               emp['late_undertime'] <> 0  or emp['nd1'] <> 0 or emp['ot1'] <> 0 or emp['nd2'] <> 0 or\
+               emp['ot2'] <> 0 or emp['nd3'] <> 0 or emp['ot3'] <> 0 or emp['nd4'] <> 0 or emp['ot4'] <> 0 or\
+               emp['nd5'] <> 0 or emp['ot5'] <> 0 or emp['nd6'] <> 0 or emp['ot6'] <> 0 or emp['nd7'] <> 0 or\
+               emp['ot7'] <> 0 or emp['nd8'] <> 0 or emp['ot8'] <> 0 or emp['nd9'] <> 0 or emp['ot9'] <> 0 or\
+               emp['nd10'] <> 0 or emp['ot10'] <> 0 or emp['nd11'] <> 0 or emp['ot11'] <> 0 or  emp['nd12'] <> 0 or\
+               emp['ot12'] <> 0:
+                cur.execute("INSERT into user_tms_report ( EMPLOYEE_NO, SURNAME, FIRSTNAME, SHIFT_SCHEDULE, RESTDAY_SCHEDULE, DATE_FROM, DATE_TO, "\
+                    "DAYS_WORKED, VL, SL, LWOP, BL, OIL, ML, MARRIAGE_DAYS, CL, SPL, PL, ABSENT, SUSPENSION, LATE_UNDERTIME, "\
+                    "ND1, OT1, ND2, OT2, ND3, OT3, ND4, OT4, ND5, OT5, OT6, ND6, OT7, ND7, OT8, ND8, OT9, ND9, OT10, ND10, OT11, ND11, OT12, ND12, "\
+                    "CREATED_BY, CREATED_DATE) "\
+                    " VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', "\
+                    "'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
+                    (emp_no, emp['lastname'], emp['firstname'], emp['shift_schedule'], emp['restday_schedule'], dateFrom.toPython(), dateTo.toPython(), emp['days_worked'],
+                    emp['vl'], emp['sl'],  emp['lwop'], emp['bl'], emp['oil'], emp['ml'], emp['marriage_days'], emp['cl'], emp['spl'], emp['pl'],
+                    emp['absent'], emp['suspension'], emp['late_undertime'],
+                    emp['nd1'], emp['ot1'], emp['nd2'], emp['ot2'],  emp['nd3'], emp['ot3'],  emp['nd4'], emp['ot4'],  emp['nd5'], emp['ot5'],
+                    emp['nd6'], emp['ot6'],  emp['nd7'], emp['ot7'],  emp['nd8'], emp['ot8'],  emp['nd9'], emp['ot9'],  emp['nd10'], emp['ot10'],
+                    emp['nd11'], emp['ot11'],  emp['nd12'], emp['ot12'], "TMSReport", now.strftime('%Y-%m-%d %H:%M:%S')))
 
         connOriTMS.commit()
 
