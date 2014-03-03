@@ -202,17 +202,22 @@ class TMSReportForm(QDialog):
             if employee_no != sv_employee_no:
                 if sv_employee_no != '':
                     # save previous employee's data to employees hash
-                    if sv_employee_no not in employees:
-                        if days_count > 0:
-                            employees[sv_employee_no] = self.createEmployee()
-                            employees[sv_employee_no]['shift_schedule'] = 'DaysWorked'
-                            employees[sv_employee_no]['days_worked'] = days_count
-                    else:
+                    if sv_employee_no in employees:
                         employees[sv_employee_no]['days_worked'] = days_count
+                        employees[sv_employee_no]['shift_schedule'] = sv_schedule
 
                 # reset count for current employee
                 sv_employee_no = employee_no
+
+                if schedule_type and not schedule_type.startswith('R'):
+                        sv_schedule = schedule_type
+                else:
+                    sv_schedule = ''
+
                 days_count = 0
+
+            if schedule_type and not schedule_type.startswith('R'):
+                    sv_schedule = schedule_type
 
             if work_hour.hour >= 5:
                 days_count += 1
