@@ -11,6 +11,7 @@ from PySide.QtCore import *
 from PySide.QtGui import *
 import pyodbc
 from datetime import *
+import calendar
 import re
 import ConfigParser
 
@@ -190,6 +191,7 @@ class TMSReportForm(QDialog):
                     " order by employee_no, actual_date " % (dateFrom.toPython(), dateTo.toPython()))
 
         sv_employee_no = ''
+        restday_schedule = set()
         days_count = 0
         for rec in cur:
             employee_no = rec[0]
@@ -199,24 +201,26 @@ class TMSReportForm(QDialog):
             time_out = rec[4]
             work_hour = rec[5]
 
+            # get the weekday of 'actual_date' i.e. 'Mon', 'Tue'...
+            weekday = calendar.day_abbr[rec[1].date().weekday()]
+
             if employee_no != sv_employee_no:
                 if sv_employee_no != '':
                     # save previous employee's data to employees hash
                     if sv_employee_no in employees:
                         employees[sv_employee_no]['days_worked'] = days_count
                         employees[sv_employee_no]['shift_schedule'] = sv_schedule
+                        employees[sv_employee_no]['restday_schedule'] = '_'.join(restday_schedule)
 
                 # reset count for current employee
                 sv_employee_no = employee_no
-
-                if schedule_type and not schedule_type.startswith('R'):
-                        sv_schedule = schedule_type
-                else:
-                    sv_schedule = ''
-
+                restday_schedule = set()
                 days_count = 0
 
-            if schedule_type and not schedule_type.startswith('R'):
+            if schedule_type:
+                if schedule_type.startswith('R'):
+                    restday_schedule.add(weekday)
+                else:
                     sv_schedule = schedule_type
 
             if work_hour.hour >= 5:
